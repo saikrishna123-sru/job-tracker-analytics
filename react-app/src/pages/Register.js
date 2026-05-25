@@ -29,15 +29,15 @@ export default function Register() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#f5f5f7]">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#f5f5f7]">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.95),_rgba(222,232,255,0.68)_45%,_rgba(245,245,247,1)_78%)]" />
 
-      <div className="relative flex min-h-screen items-center justify-center px-4">
+      <div className="relative flex min-h-screen items-center justify-center px-4 py-6 sm:py-10">
         <form
           onSubmit={handleRegister}
-          className="w-[min(92vw,390px)] rounded-[28px] border border-white/80 bg-white/78 p-7 text-[#1d1d1f] shadow-[0_28px_70px_-34px_rgba(15,23,42,0.52)] backdrop-blur-2xl"
+          className="w-full max-w-md rounded-[28px] border border-white/80 bg-white/78 p-5 text-[#1d1d1f] shadow-[0_28px_70px_-34px_rgba(15,23,42,0.52)] backdrop-blur-2xl sm:p-7"
         >
-          <h1 className="text-center text-4xl font-semibold tracking-tight text-[#1d1d1f]">
+          <h1 className="text-center text-3xl font-semibold tracking-tight text-[#1d1d1f] sm:text-4xl">
             Register
           </h1>
 

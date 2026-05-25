@@ -92,13 +92,13 @@ export default function Login() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#f5f5f7]">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#f5f5f7]">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.95),_rgba(222,232,255,0.68)_45%,_rgba(245,245,247,1)_78%)]" />
 
-      <div className="relative flex min-h-screen items-center justify-center px-4">
-        <div className="w-[min(92vw,390px)]">
+      <div className="relative flex min-h-screen items-center justify-center px-4 py-6 sm:py-10">
+        <div className="w-full max-w-md">
           <h1
-            className="mb-5 text-center text-5xl font-semibold tracking-tight text-[#0b1220]"
+            className="mb-5 text-center text-4xl font-semibold tracking-tight text-[#0b1220] sm:text-5xl"
             style={{
               fontFamily:
                 "'Avenir Next', 'SF Pro Display', 'Helvetica Neue', -apple-system, sans-serif",
@@ -109,9 +109,9 @@ export default function Login() {
 
           <form
             onSubmit={handleLogin}
-            className="rounded-[28px] border border-white/80 bg-white/78 p-7 text-[#1d1d1f] shadow-[0_28px_70px_-34px_rgba(15,23,42,0.52)] backdrop-blur-2xl"
+            className="rounded-[28px] border border-white/80 bg-white/78 p-5 text-[#1d1d1f] shadow-[0_28px_70px_-34px_rgba(15,23,42,0.52)] backdrop-blur-2xl sm:p-7"
           >
-            <h2 className="text-center text-4xl font-semibold tracking-tight text-[#1d1d1f]">
+            <h2 className="text-center text-3xl font-semibold tracking-tight text-[#1d1d1f] sm:text-4xl">
               Login
             </h2>
 
@@ -146,7 +146,7 @@ export default function Login() {
               </div>
             </div>
 
-            <div className="mt-3 flex items-center justify-between">
+            <div className="mt-3 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
               <label className="flex items-center gap-2 text-sm text-[#6e7781]">
                 <input
                   type="checkbox"
@@ -160,14 +160,17 @@ export default function Login() {
               <button
                 type="button"
                 onClick={() => navigate("/forgot-password")}
-                className="text-sm text-[#6e7781] underline underline-offset-2 transition hover:text-[#1d1d1f]"
+                className="self-start text-sm text-[#6e7781] underline underline-offset-2 transition hover:text-[#1d1d1f] md:self-auto"
               >
                 Forgot password?
               </button>
             </div>
 
             {error && (
-              <p className="mt-3 text-sm font-medium text-[#dc2626]" role="alert">
+              <p
+                className="mt-3 break-words text-sm font-medium text-[#dc2626]"
+                role="alert"
+              >
                 {error}
               </p>
             )}
@@ -191,3 +194,4 @@ export default function Login() {
     </div>
   );
 }
+

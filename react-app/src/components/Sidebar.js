@@ -13,7 +13,20 @@ function getObjectIdDate(id) {
   }
 }
 
-function Sidebar() {
+function CloseIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
+      <path
+        d="M6 6L18 18M18 6L6 18"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function Sidebar({ isOpen = false, onClose = () => {} }) {
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,6 +54,28 @@ function Sidebar() {
     loadJobs();
   }, [location.pathname]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+    if (!isOpen || window.innerWidth >= 768) return undefined;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isOpen]);
+
+  const handleNavigate = (path) => {
+    navigate(path);
+    onClose();
+  };
+
+  const handleLogout = () => {
+    onClose();
+    logout();
+  };
+
   const followUps = useMemo(() => {
     return {
       applied: jobs.filter((job) => job.status === "Applied").length,
@@ -66,10 +101,33 @@ function Sidebar() {
   }, [jobs]);
 
   return (
-    <aside className="sticky top-0 h-screen w-[252px] shrink-0 self-start border-r border-white/70 bg-white/70 px-5 py-6 text-[#1d1d1f] backdrop-blur-2xl">
-      <div className="flex h-full flex-col">
-        <div>
-          <h1 className="mb-8 text-2xl font-semibold tracking-tight">Job Tracker</h1>
+    <>
+      <div
+        className={`fixed inset-0 z-40 bg-[#0f172a]/40 backdrop-blur-sm transition-opacity duration-300 md:hidden ${
+          isOpen ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+        onClick={onClose}
+      />
+
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-[min(84vw,300px)] shrink-0 border-r border-white/70 bg-white/80 text-[#1d1d1f] backdrop-blur-2xl transition-transform duration-300 md:sticky md:top-0 md:z-0 md:h-screen md:w-[252px] ${
+          isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        }`}
+      >
+        <div className="flex h-full flex-col overflow-y-auto px-4 py-5 md:px-5 md:py-6">
+          <div className="mb-6 flex items-center justify-between md:mb-8">
+            <h1 className="text-xl font-semibold tracking-tight md:text-2xl">
+              Job Tracker
+            </h1>
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-lg border border-[#d5dbe2] bg-white p-2 text-[#1d1d1f] transition hover:bg-[#f3f4f6] md:hidden"
+              aria-label="Close menu"
+            >
+              <CloseIcon />
+            </button>
+          </div>
 
           <div className="space-y-2">
             {navItems.map((item) => {
@@ -77,7 +135,7 @@ function Sidebar() {
               return (
                 <button
                   key={item.path}
-                  onClick={() => navigate(item.path)}
+                  onClick={() => handleNavigate(item.path)}
                   className={`w-full rounded-xl px-4 py-2.5 text-left text-sm font-medium transition ${
                     isActive
                       ? "bg-[#1d1d1f] text-white shadow-[0_10px_30px_-16px_rgba(15,23,42,0.95)]"
@@ -89,135 +147,137 @@ function Sidebar() {
               );
             })}
           </div>
-        </div>
 
-        <div className="mt-5 flex-1 space-y-3 overflow-y-auto pr-1">
-          <section className="rounded-2xl border border-white/85 bg-white/85 p-3 shadow-[0_12px_28px_-22px_rgba(15,23,42,0.55)]">
-            <p className="text-xs font-semibold uppercase tracking-wide text-[#6e7781]">
-              Pipeline Snapshot
-            </p>
-            <div className="mt-2 space-y-1.5 text-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-[#6e7781]">Applied</span>
-                <span className="font-semibold">{followUps.applied}</span>
+          <div className="mt-4 flex-1 space-y-3 overflow-y-auto pr-1">
+            <section className="rounded-2xl border border-white/85 bg-white/85 p-3 shadow-[0_12px_28px_-22px_rgba(15,23,42,0.55)]">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#6e7781]">
+                Pipeline Snapshot
+              </p>
+              <div className="mt-2 space-y-1.5 text-sm">
+                <div className="flex items-center justify-between">
+                  <span className="text-[#6e7781]">Applied</span>
+                  <span className="font-semibold">{followUps.applied}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[#6e7781]">Interview</span>
+                  <span className="font-semibold">{followUps.interview}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[#6e7781]">Assessment</span>
+                  <span className="font-semibold">{followUps.assessment}</span>
+                </div>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-[#6e7781]">Interview</span>
-                <span className="font-semibold">{followUps.interview}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-[#6e7781]">Assessment</span>
-                <span className="font-semibold">{followUps.assessment}</span>
-              </div>
-            </div>
-          </section>
+            </section>
 
-          <section className="rounded-2xl border border-white/85 bg-white/85 p-3 shadow-[0_12px_28px_-22px_rgba(15,23,42,0.55)]">
-            <p className="text-xs font-semibold uppercase tracking-wide text-[#6e7781]">
-              Quick Actions
-            </p>
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              <button
-                onClick={() => navigate("/")}
-                className="rounded-lg border border-[#d5dbe2] bg-white px-2 py-1.5 text-xs font-medium transition hover:bg-[#f3f4f6]"
-              >
-                Add Job
-              </button>
-              <button
-                onClick={() => navigate("/analytics")}
-                className="rounded-lg border border-[#d5dbe2] bg-white px-2 py-1.5 text-xs font-medium transition hover:bg-[#f3f4f6]"
-              >
-                View Charts
-              </button>
-            </div>
-          </section>
+            <section className="rounded-2xl border border-white/85 bg-white/85 p-3 shadow-[0_12px_28px_-22px_rgba(15,23,42,0.55)]">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#6e7781]">
+                Quick Actions
+              </p>
+              <div className="mt-2 grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => handleNavigate("/")}
+                  className="rounded-lg border border-[#d5dbe2] bg-white px-2 py-1.5 text-xs font-medium transition hover:bg-[#f3f4f6]"
+                >
+                  Add Job
+                </button>
+                <button
+                  onClick={() => handleNavigate("/analytics")}
+                  className="rounded-lg border border-[#d5dbe2] bg-white px-2 py-1.5 text-xs font-medium transition hover:bg-[#f3f4f6]"
+                >
+                  View Charts
+                </button>
+              </div>
+            </section>
 
-          <section className="rounded-2xl border border-white/85 bg-white/85 p-3 shadow-[0_12px_28px_-22px_rgba(15,23,42,0.55)]">
-            <p className="text-xs font-semibold uppercase tracking-wide text-[#6e7781]">
-              This Month Goal
-            </p>
-            <p className="mt-1 text-sm font-medium text-[#1d1d1f]">
-              {progress.value} / {GOAL_TARGET} applications
-            </p>
-            <div className="mt-2 h-2 rounded-full bg-[#e2e8f0]">
-              <div
-                className="h-2 rounded-full bg-[#1d4ed8]"
-                style={{ width: `${progress.percent}%` }}
-              />
-            </div>
-          </section>
+            <section className="rounded-2xl border border-white/85 bg-white/85 p-3 shadow-[0_12px_28px_-22px_rgba(15,23,42,0.55)]">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#6e7781]">
+                This Month Goal
+              </p>
+              <p className="mt-1 text-sm font-medium text-[#1d1d1f]">
+                {progress.value} / {GOAL_TARGET} applications
+              </p>
+              <div className="mt-2 h-2 rounded-full bg-[#e2e8f0]">
+                <div
+                  className="h-2 rounded-full bg-[#1d4ed8]"
+                  style={{ width: `${progress.percent}%` }}
+                />
+              </div>
+            </section>
 
-          <section className="rounded-2xl border border-white/85 bg-white/85 p-3 shadow-[0_12px_28px_-22px_rgba(15,23,42,0.55)]">
-            <p className="text-xs font-semibold uppercase tracking-wide text-[#6e7781]">
-              Recent Activity
-            </p>
-            <div className="mt-2 space-y-1.5">
-              {recentJobs.length === 0 ? (
-                <p className="text-xs text-[#6e7781]">No activity yet.</p>
-              ) : (
-                recentJobs.map((job) => (
-                  <div key={job._id} className="text-xs">
-                    <p className="truncate font-medium text-[#1d1d1f]">{job.company}</p>
-                    <p className="text-[#6e7781]">{job.status}</p>
-                  </div>
-                ))
-              )}
-            </div>
-          </section>
+            <section className="rounded-2xl border border-white/85 bg-white/85 p-3 shadow-[0_12px_28px_-22px_rgba(15,23,42,0.55)]">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#6e7781]">
+                Recent Activity
+              </p>
+              <div className="mt-2 space-y-1.5">
+                {recentJobs.length === 0 ? (
+                  <p className="text-xs text-[#6e7781]">No activity yet.</p>
+                ) : (
+                  recentJobs.map((job) => (
+                    <div key={job._id} className="text-xs">
+                      <p className="truncate font-medium text-[#1d1d1f]">
+                        {job.company}
+                      </p>
+                      <p className="text-[#6e7781]">{job.status}</p>
+                    </div>
+                  ))
+                )}
+              </div>
+            </section>
 
-          <section className="rounded-2xl border border-white/85 bg-white/85 p-3 shadow-[0_12px_28px_-22px_rgba(15,23,42,0.55)]">
-            <p className="text-xs font-semibold uppercase tracking-wide text-[#6e7781]">
-              Status Legend
-            </p>
-            <div className="mt-2 grid grid-cols-2 gap-x-2 gap-y-1 text-xs">
-              <div className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-[#2563eb]" />
-                <span>Applied</span>
+            <section className="rounded-2xl border border-white/85 bg-white/85 p-3 shadow-[0_12px_28px_-22px_rgba(15,23,42,0.55)]">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#6e7781]">
+                Status Legend
+              </p>
+              <div className="mt-2 grid grid-cols-2 gap-x-2 gap-y-1 text-xs">
+                <div className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-[#2563eb]" />
+                  <span>Applied</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-[#3b82f6]" />
+                  <span>Interview</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-[#60a5fa]" />
+                  <span>Assessment</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-[#22c55e]" />
+                  <span>Offer</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-[#ef4444]" />
+                  <span>Rejected</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-[#3b82f6]" />
-                <span>Interview</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-[#60a5fa]" />
-                <span>Assessment</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-[#22c55e]" />
-                <span>Offer</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-[#ef4444]" />
-                <span>Rejected</span>
-              </div>
-            </div>
-          </section>
-        </div>
-
-        <div className="pt-4">
-          <div className="mb-4 rounded-2xl border border-white/90 bg-white/80 p-3 shadow-[0_12px_30px_-20px_rgba(15,23,42,0.55)]">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#1d1d1f] to-[#4b5563] text-sm font-semibold text-white">
-                {initial}
-              </div>
-              <div className="min-w-0">
-                <p className="text-xs text-[#6e7781]">Signed in as</p>
-                <p className="truncate text-sm font-medium text-[#1d1d1f]">
-                  {email || "No Email"}
-                </p>
-              </div>
-            </div>
+            </section>
           </div>
 
-          <button
-            onClick={logout}
-            className="w-full rounded-xl bg-[#1d1d1f] px-4 py-2.5 text-sm font-medium text-white transition hover:bg-black"
-          >
-            Logout
-          </button>
+          <div className="pt-4">
+            <div className="mb-4 rounded-2xl border border-white/90 bg-white/80 p-3 shadow-[0_12px_30px_-20px_rgba(15,23,42,0.55)]">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#1d1d1f] to-[#4b5563] text-sm font-semibold text-white">
+                  {initial}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs text-[#6e7781]">Signed in as</p>
+                  <p className="truncate text-sm font-medium text-[#1d1d1f]">
+                    {email || "No Email"}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={handleLogout}
+              className="w-full rounded-xl bg-[#1d1d1f] px-4 py-2.5 text-sm font-medium text-white transition hover:bg-black"
+            >
+              Logout
+            </button>
+          </div>
         </div>
-      </div>
-    </aside>
+      </aside>
+    </>
   );
 }
 
