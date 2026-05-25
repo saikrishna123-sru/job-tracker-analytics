@@ -121,8 +121,8 @@ export default function Dashboard() {
           onClose={() => setIsSidebarOpen(false)}
         />
 
-        <main className="w-full flex-1 overflow-y-auto px-3 pb-5 pt-3.5 sm:px-5 sm:pb-7 sm:pt-5 lg:px-8 lg:pt-7">
-          <div className="mx-auto w-full max-w-6xl space-y-4 sm:space-y-5">
+        <main className="w-full min-w-0 flex-1 overflow-y-auto px-3 pb-3 pt-2.5 sm:px-5 sm:pb-5 sm:pt-4 lg:px-8 lg:pt-5">
+          <div className="mx-auto w-full max-w-6xl space-y-3 sm:space-y-4">
             <div className="flex items-center justify-between md:hidden">
               <button
                 type="button"
@@ -141,58 +141,60 @@ export default function Dashboard() {
               <h1 className="text-2xl font-semibold tracking-tight text-[#0f172a] sm:text-3xl lg:text-4xl">
                 Dashboard
               </h1>
-              <p className="mt-1.5 text-xs text-[#64748b] sm:text-sm md:text-base">
+              <p className="mt-1 text-xs text-[#64748b] sm:text-sm md:text-base">
                 Track applications with a compact, high-signal workflow.
               </p>
             </header>
 
-            <section className="grid grid-cols-1 gap-2.5 md:grid-cols-2 lg:gap-3 xl:grid-cols-4 2xl:grid-cols-6">
+            <section className="grid grid-cols-2 gap-1.5 sm:gap-2 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-6">
               {Object.entries(stats).map(([key, value]) => (
                 <article
                   key={key}
-                  className="group rounded-xl border border-[#e5eaf2] bg-white/90 px-3 py-2.5 shadow-[0_8px_20px_-18px_rgba(15,23,42,0.95)] backdrop-blur-xl transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_30px_-24px_rgba(15,23,42,0.95)] active:scale-[0.995] sm:px-4 sm:py-3"
+                  className="group rounded-xl border border-[#e5eaf2] bg-white/90 px-2 py-1.5 shadow-[0_8px_20px_-18px_rgba(15,23,42,0.95)] backdrop-blur-xl transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_30px_-24px_rgba(15,23,42,0.95)] active:scale-[0.995] sm:px-2.5 sm:py-2"
                 >
-                  <div className="flex items-center justify-between gap-3">
-                    <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[#64748b]">
+                  <div className="flex items-end justify-between gap-2">
+                    <p className="text-[10px] font-medium uppercase tracking-[0.08em] text-[#64748b] sm:text-[11px]">
                       {key}
                     </p>
-                    <span
-                      className="h-2 w-2 shrink-0 rounded-full"
-                      style={{ backgroundColor: statAccent[key] || "#0f172a" }}
-                    />
+                    <div className="flex shrink-0 items-center gap-1.5">
+                      <span
+                        className="h-1.5 w-1.5 rounded-full sm:h-2 sm:w-2"
+                        style={{ backgroundColor: statAccent[key] || "#0f172a" }}
+                      />
+                      <h2 className="text-[1.15rem] font-semibold leading-none tracking-tight text-[#0f172a] sm:text-[1.35rem]">
+                        {value}
+                      </h2>
+                    </div>
                   </div>
-                  <h2 className="mt-1 text-2xl font-semibold leading-none tracking-tight text-[#0f172a] sm:text-[1.7rem]">
-                    {value}
-                  </h2>
                 </article>
               ))}
             </section>
 
-            <section className="rounded-2xl border border-[#e5eaf2] bg-white/88 p-3 shadow-[0_14px_32px_-26px_rgba(15,23,42,0.9)] backdrop-blur-xl sm:p-4">
-              <h2 className="mb-3 text-base font-semibold text-[#0f172a] sm:text-lg">
+            <section className="rounded-2xl border border-[#e5eaf2] bg-white/88 p-2 shadow-[0_14px_32px_-26px_rgba(15,23,42,0.9)] backdrop-blur-xl sm:p-3">
+              <h2 className="mb-2 text-sm font-semibold text-[#0f172a] sm:text-base">
                 Add Job
               </h2>
 
               <div className="overflow-x-auto">
-                <div className="grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-[2fr_2fr_1.2fr_1.3fr_auto]">
+                <div className="grid grid-cols-1 gap-1.5 sm:gap-2 md:grid-cols-2 xl:grid-cols-[2fr_2fr_1.2fr_1.3fr_auto]">
                   <input
                     value={company}
                     onChange={(e) => setCompany(e.target.value)}
                     placeholder="Company"
-                    className="w-full rounded-lg border border-[#d8dde3] bg-[#f8fafc] px-3.5 py-2 text-sm text-[#0f172a] outline-none transition focus:border-[#94a3b8] focus:ring-2 focus:ring-[#dbeafe]"
+                    className="w-full min-w-0 rounded-lg border border-[#d8dde3] bg-[#f8fafc] px-3.5 py-2 text-sm text-[#0f172a] outline-none transition focus:border-[#94a3b8] focus:ring-2 focus:ring-[#dbeafe]"
                   />
 
                   <input
                     value={role}
                     onChange={(e) => setRole(e.target.value)}
                     placeholder="Role"
-                    className="w-full rounded-lg border border-[#d8dde3] bg-[#f8fafc] px-3.5 py-2 text-sm text-[#0f172a] outline-none transition focus:border-[#94a3b8] focus:ring-2 focus:ring-[#dbeafe]"
+                    className="w-full min-w-0 rounded-lg border border-[#d8dde3] bg-[#f8fafc] px-3.5 py-2 text-sm text-[#0f172a] outline-none transition focus:border-[#94a3b8] focus:ring-2 focus:ring-[#dbeafe]"
                   />
 
                   <select
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
-                    className="w-full rounded-lg border border-[#d8dde3] bg-[#f8fafc] px-3.5 py-2 text-sm text-[#0f172a] outline-none transition focus:border-[#94a3b8] focus:ring-2 focus:ring-[#dbeafe]"
+                    className="w-full min-w-0 rounded-lg border border-[#d8dde3] bg-[#f8fafc] px-3.5 py-2 text-sm text-[#0f172a] outline-none transition focus:border-[#94a3b8] focus:ring-2 focus:ring-[#dbeafe]"
                   >
                     <option>Applied</option>
                     <option>Interview</option>
@@ -205,7 +207,7 @@ export default function Dashboard() {
                     type="date"
                     value={applicationDate}
                     onChange={(e) => setApplicationDate(e.target.value)}
-                    className="w-full rounded-lg border border-[#d8dde3] bg-[#f8fafc] px-3.5 py-2 text-sm text-[#0f172a] outline-none transition focus:border-[#94a3b8] focus:ring-2 focus:ring-[#dbeafe]"
+                    className="block w-full min-w-0 max-w-full appearance-none rounded-lg border border-[#d8dde3] bg-[#f8fafc] px-3.5 py-2 text-sm text-[#0f172a] outline-none transition focus:border-[#94a3b8] focus:ring-2 focus:ring-[#dbeafe]"
                   />
 
                   <button
@@ -218,18 +220,18 @@ export default function Dashboard() {
               </div>
             </section>
 
-            <section className="space-y-2.5">
+            <section className="space-y-1.5 sm:space-y-2">
               {jobs.length === 0 ? (
                 <div className="rounded-xl border border-dashed border-[#d5dbe2] bg-white/65 p-4 text-center text-sm text-[#64748b]">
                   No jobs yet. Add your first application to get started.
                 </div>
               ) : (
                 <>
-                  <div className="space-y-2.5 md:hidden">
+                  <div className="space-y-1.5 sm:space-y-2 md:hidden">
                     {jobs.map((job) => (
                       <article
                         key={job._id}
-                        className="rounded-xl border border-[#e5eaf2] bg-white/90 p-3 shadow-[0_10px_22px_-20px_rgba(15,23,42,0.85)] backdrop-blur-xl transition duration-200 active:scale-[0.997]"
+                        className="rounded-xl border border-[#e5eaf2] bg-white/90 p-2 shadow-[0_10px_22px_-20px_rgba(15,23,42,0.85)] backdrop-blur-xl transition duration-200 active:scale-[0.997] sm:p-2.5"
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0">
@@ -245,11 +247,11 @@ export default function Dashboard() {
                           </span>
                         </div>
 
-                        <p className="mt-1.5 text-xs font-medium text-[#64748b]">
+                        <p className="mt-1 text-xs font-medium text-[#64748b]">
                           Applied {formatDisplayDate(job.applicationDate)}
                         </p>
 
-                        <div className="mt-2.5 flex items-center gap-1.5">
+                        <div className="mt-1.5 flex items-center gap-1.5 sm:mt-2">
                           <button
                             onClick={() => openEdit(job)}
                             className="flex-1 rounded-md border border-[#d3dae6] bg-white px-3 py-1.5 text-sm font-medium text-[#0f172a] transition hover:bg-[#f3f4f6] active:scale-[0.99]"
@@ -325,26 +327,26 @@ export default function Dashboard() {
       </div>
 
       {editJob && (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-[#0f172a]/35 px-4 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-2xl border border-[#e5eaf2] bg-white/95 p-4 shadow-[0_25px_65px_-28px_rgba(15,23,42,0.7)] sm:p-5">
+        <div className="fixed inset-0 z-[70] flex items-start justify-center overflow-y-auto overscroll-contain bg-[#0f172a]/35 px-2 py-3 backdrop-blur-sm sm:items-center sm:px-4">
+          <div className="my-auto w-full min-w-0 max-w-[95vw] max-h-[90dvh] overflow-y-auto overflow-x-hidden rounded-2xl border border-[#e5eaf2] bg-white/95 p-3 shadow-[0_25px_65px_-28px_rgba(15,23,42,0.7)] sm:max-w-md sm:p-5">
             <h2 className="text-lg font-semibold tracking-tight text-[#0f172a] sm:text-xl">
               Edit Job
             </h2>
 
-            <div className="mt-3.5 space-y-2.5">
+            <div className="mt-2.5 min-w-0 space-y-2 sm:mt-3 sm:space-y-2.5">
               <input
                 value={editJob.company}
                 onChange={(e) =>
                   setEditJob({ ...editJob, company: e.target.value })
                 }
-                className="w-full rounded-lg border border-[#d8dde3] bg-[#f8fafc] px-3.5 py-2 text-sm text-[#0f172a] outline-none transition focus:border-[#94a3b8] focus:ring-2 focus:ring-[#dbeafe]"
+                className="block w-full min-w-0 max-w-full rounded-lg border border-[#d8dde3] bg-[#f8fafc] px-3.5 py-2 text-sm text-[#0f172a] outline-none transition focus:border-[#94a3b8] focus:ring-2 focus:ring-[#dbeafe]"
                 placeholder="Company"
               />
 
               <input
                 value={editJob.role}
                 onChange={(e) => setEditJob({ ...editJob, role: e.target.value })}
-                className="w-full rounded-lg border border-[#d8dde3] bg-[#f8fafc] px-3.5 py-2 text-sm text-[#0f172a] outline-none transition focus:border-[#94a3b8] focus:ring-2 focus:ring-[#dbeafe]"
+                className="block w-full min-w-0 max-w-full rounded-lg border border-[#d8dde3] bg-[#f8fafc] px-3.5 py-2 text-sm text-[#0f172a] outline-none transition focus:border-[#94a3b8] focus:ring-2 focus:ring-[#dbeafe]"
                 placeholder="Role"
               />
 
@@ -353,7 +355,7 @@ export default function Dashboard() {
                 onChange={(e) =>
                   setEditJob({ ...editJob, status: e.target.value })
                 }
-                className="w-full rounded-lg border border-[#d8dde3] bg-[#f8fafc] px-3.5 py-2 text-sm text-[#0f172a] outline-none transition focus:border-[#94a3b8] focus:ring-2 focus:ring-[#dbeafe]"
+                className="block w-full min-w-0 max-w-full rounded-lg border border-[#d8dde3] bg-[#f8fafc] px-3.5 py-2 text-sm text-[#0f172a] outline-none transition focus:border-[#94a3b8] focus:ring-2 focus:ring-[#dbeafe]"
               >
                 <option>Applied</option>
                 <option>Interview</option>
@@ -368,20 +370,20 @@ export default function Dashboard() {
                 onChange={(e) =>
                   setEditJob({ ...editJob, applicationDate: e.target.value })
                 }
-                className="w-full rounded-lg border border-[#d8dde3] bg-[#f8fafc] px-3.5 py-2 text-sm text-[#0f172a] outline-none transition focus:border-[#94a3b8] focus:ring-2 focus:ring-[#dbeafe]"
+                className="block w-full min-w-0 max-w-full appearance-none rounded-lg border border-[#d8dde3] bg-[#f8fafc] px-3.5 py-2 text-sm text-[#0f172a] outline-none transition focus:border-[#94a3b8] focus:ring-2 focus:ring-[#dbeafe]"
               />
             </div>
 
-            <div className="mt-4 flex flex-col gap-2 md:flex-row md:justify-end">
+            <div className="mt-3.5 flex flex-col gap-2 sm:mt-4 sm:flex-row sm:justify-end">
               <button
                 onClick={() => setEditJob(null)}
-                className="w-full rounded-lg border border-[#d1d5db] bg-white px-4 py-2 text-sm font-medium text-[#0f172a] transition hover:bg-[#f3f4f6] md:w-auto"
+                className="w-full rounded-lg border border-[#d1d5db] bg-white px-4 py-2 text-sm font-medium text-[#0f172a] transition hover:bg-[#f3f4f6] sm:w-auto"
               >
                 Cancel
               </button>
               <button
                 onClick={updateJob}
-                className="w-full rounded-lg bg-[#111827] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#0b1220] active:scale-[0.99] md:w-auto"
+                className="w-full rounded-lg bg-[#111827] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#0b1220] active:scale-[0.99] sm:w-auto"
               >
                 Update
               </button>
